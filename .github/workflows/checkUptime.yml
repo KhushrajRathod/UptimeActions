@@ -1,0 +1,49 @@
+name: Check uptime
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: 0/5 * * * *
+
+env:
+  UPTIME_SLACK_TOKEN: ${{ secrets.UPTIME_SLACK_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+
+    - name: Install dependencies
+      run: yarn
+    
+    - name: Compute state
+      id: compute
+      run: yarn start
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      if: steps.compute.outputs.state_changed == true
+      with:
+        tag_name: ${{ GITHUB_RUN_NUMBER }}
+        release_name: ${{ GITHUB_RUN_NUMBER }}
+        body: Uptime changes
+    
+    - name: Upload Top 20
+      uses: actions/upload-release-asset@v1
+      if: steps.compute.outputs.state_changed == true
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./state.json
+        asset_name: state.json
+        asset_content_type: application/json
