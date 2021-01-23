@@ -35,8 +35,8 @@ jobs:
       uses: actions/create-release@v1
       if: steps.compute.outputs.state_changed == true
       with:
-        tag_name: ${{ GITHUB_RUN_NUMBER }}
-        release_name: ${{ GITHUB_RUN_NUMBER }}
+        tag_name: ${{ env.GITHUB_RUN_NUMBER }}
+        release_name: ${{ env.GITHUB_RUN_NUMBER }}
         body: Uptime changes
     
     - name: Upload Top 20
