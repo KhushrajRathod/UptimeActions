@@ -58,12 +58,11 @@ async function main() {
     }
 
     if (hasProperties(changes)) {
-        process.env.STATE_CHANGED = true
         console.log("Changes exist, alerting:")
         console.log(changes)
 
         await writeFile('state.json', JSON.stringify(newState))
-        core.setOutput('state_changed', true)
+        core.setOutput('state_changed', "true")
 
         for (const endpoint of config.alertEndpoints) {
             try {
