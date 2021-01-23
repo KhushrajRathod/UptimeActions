@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Uptimerobot
+uptimerobot-monitors.csv
+
+# State
+state.json
