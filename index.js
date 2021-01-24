@@ -62,8 +62,8 @@ async function main() {
         console.log(changes)
 
         await writeFile('state.json', JSON.stringify(newState))
-        core.setOutput('state_changed', "true")
-
+        core.exportVariable('STATE_DID_CHANGE', '1')
+        
         for (const endpoint of config.alertEndpoints) {
             try {
                 await got.post(endpoint, {

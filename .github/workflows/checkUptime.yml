@@ -11,6 +11,7 @@ on:
 env:
   UPTIME_SLACK_TOKEN: ${{ secrets.UPTIME_SLACK_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_RUN_NUMBER: ${{ GITHUB_RUN_NUMBER }}
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
-      if: steps.compute.outputs.state_changed == true
+      if: env.STATE_DID_CHANGE == 1
       with:
         tag_name: ${{ env.GITHUB_RUN_NUMBER }}
         release_name: ${{ env.GITHUB_RUN_NUMBER }}
@@ -41,7 +42,7 @@ jobs:
     
     - name: Upload Top 20
       uses: actions/upload-release-asset@v1
-      if: steps.compute.outputs.state_changed == true
+      if: env.STATE_DID_CHANGE == 1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./state.json
