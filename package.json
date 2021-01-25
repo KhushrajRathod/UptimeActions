@@ -6,7 +6,8 @@
     "author": "Khushraj Rathod <khushraj.rathod@gmail.com>",
     "license": "GPL-3.0",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "setNowEnv": "node helpers/now.js"
     },
     "dependencies": {
         "@actions/core": "^1.2.6",

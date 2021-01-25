@@ -11,7 +11,6 @@ on:
 env:
   UPTIME_SLACK_TOKEN: ${{ secrets.UPTIME_SLACK_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GITHUB_RUN_NUMBER: ${{ GITHUB_RUN_NUMBER }}
 
 jobs:
   build:
@@ -31,13 +30,16 @@ jobs:
       id: compute
       run: yarn start
 
+    - name: Set now env
+      run: yarn setNowEnv
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       if: env.STATE_DID_CHANGE == 1
       with:
-        tag_name: ${{ env.GITHUB_RUN_NUMBER }}
-        release_name: ${{ env.GITHUB_RUN_NUMBER }}
+        tag_name: ${{ env.NOW_TAG }}
+        release_name: ${{ env.NOW }}
         body: Uptime changes
     
     - name: Upload Top 20
